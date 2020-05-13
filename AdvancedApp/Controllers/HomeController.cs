@@ -19,17 +19,17 @@ namespace AdvancedApp.Controllers
             return View(context.Employees);
         }
 
-        public IActionResult Edit(long id)
+        public IActionResult Edit(string SSN)
         {
-            return View(id == default(long)
+            return View(string.IsNullOrWhiteSpace(SSN)
             ? new Employee() : context.Employees.Include(e => e.OtherIdentity)
-                .First(e => e.Id == id));
+                .First(e => e.SSN == SSN));
         }
 
         [HttpPost]
         public IActionResult Update(Employee employee)
         {
-            if (employee.Id == default(long))
+            if (context.Employees.Count(e => e.SSN == employee.SSN) == 0)
             {
                 context.Add(employee);
             }

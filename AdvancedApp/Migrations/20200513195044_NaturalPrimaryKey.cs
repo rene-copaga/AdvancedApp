@@ -5,12 +5,23 @@ using System.Collections.Generic;
 
 namespace AdvancedApp.Migrations
 {
-    public partial class AlternateKey : Migration
+    public partial class NaturalPrimaryKey : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_Employees",
+                table: "Employees");
+
             migrationBuilder.DropIndex(
                 name: "SSNIndex",
+                table: "Employees");
+
+            migrationBuilder.DropSequence(
+                name: "EntityFrameworkHiLoSequence");
+
+            migrationBuilder.DropColumn(
+                name: "Id",
                 table: "Employees");
 
             migrationBuilder.AlterColumn<string>(
@@ -20,8 +31,8 @@ namespace AdvancedApp.Migrations
                 oldClrType: typeof(string),
                 oldNullable: true);
 
-            migrationBuilder.AddUniqueConstraint(
-                name: "AK_Employees_SSN",
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_Employees",
                 table: "Employees",
                 column: "SSN");
 
@@ -59,15 +70,30 @@ namespace AdvancedApp.Migrations
             migrationBuilder.DropTable(
                 name: "SecondaryIdentity");
 
-            migrationBuilder.DropUniqueConstraint(
-                name: "AK_Employees_SSN",
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_Employees",
                 table: "Employees");
+
+            migrationBuilder.CreateSequence(
+                name: "EntityFrameworkHiLoSequence",
+                incrementBy: 10);
 
             migrationBuilder.AlterColumn<string>(
                 name: "SSN",
                 table: "Employees",
                 nullable: true,
                 oldClrType: typeof(string));
+
+            migrationBuilder.AddColumn<long>(
+                name: "Id",
+                table: "Employees",
+                nullable: false,
+                defaultValue: 0L);
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_Employees",
+                table: "Employees",
+                column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "SSNIndex",
