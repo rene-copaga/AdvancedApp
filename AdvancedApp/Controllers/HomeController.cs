@@ -1,5 +1,6 @@
 ﻿using AdvancedApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,8 @@ namespace AdvancedApp.Controllers
         public IActionResult Edit(long id)
         {
             return View(id == default(long)
-            ? new Employee() : context.Employees.Find(id));
+            ? new Employee() : context.Employees.Include(e => e.OtherIdentity)
+                .First(e => e.Id == id));
         }
 
         [HttpPost]
