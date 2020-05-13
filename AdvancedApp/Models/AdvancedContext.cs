@@ -13,6 +13,9 @@ namespace AdvancedApp.Models
         {
             modelBuilder.Entity<Employee>()
                 .Property(e => e.Id).ForSqlServerUseSequenceHiLo();
+
+            modelBuilder.Entity<Employee>()
+                .HasIndex(e => e.SSN).HasName("SSNIndex").IsUnique();
         }
     }
 }

@@ -11,9 +11,10 @@ using System;
 namespace AdvancedApp.Migrations
 {
     [DbContext(typeof(AdvancedContext))]
-    partial class AdvancedContextModelSnapshot : ModelSnapshot
+    [Migration("20200513025907_UniqueIndex")]
+    partial class UniqueIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
