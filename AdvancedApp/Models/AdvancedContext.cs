@@ -11,7 +11,8 @@ namespace AdvancedApp.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<Employee>()
+                .Property(e => e.Id).ForSqlServerUseSequenceHiLo();
         }
     }
 }
