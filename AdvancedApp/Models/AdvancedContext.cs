@@ -12,12 +12,16 @@ namespace AdvancedApp.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().Ignore(e => e.Id);
-            modelBuilder.Entity<Employee>().HasKey(e => e.SSN);
+            modelBuilder.Entity<Employee>()
+                .HasKey(e => new { e.SSN, e.FirstName, e.FamilyName });
 
             modelBuilder.Entity<SecondaryIdentity>()
                 .HasOne(s => s.PrimaryIdentity)
                 .WithOne(e => e.OtherIdentity)
-                .HasForeignKey<SecondaryIdentity>(s => s.PrimarySSN);
+                .HasPrincipalKey<Employee>(e => new { e.SSN,
+                    e.FirstName, e.FamilyName })
+                .HasForeignKey<SecondaryIdentity>(s => new { s.PrimarySSN,
+                    s.PrimaryFirstName, s.PrimaryFamilyName});
         }
     }
 }

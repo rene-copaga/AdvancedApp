@@ -11,8 +11,8 @@ using System;
 namespace AdvancedApp.Migrations
 {
     [DbContext(typeof(AdvancedContext))]
-    [Migration("20200513195044_NaturalPrimaryKey")]
-    partial class NaturalPrimaryKey
+    [Migration("20200513203956_CompositeKey")]
+    partial class CompositeKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,16 +23,15 @@ namespace AdvancedApp.Migrations
 
             modelBuilder.Entity("AdvancedApp.Models.Employee", b =>
                 {
-                    b.Property<string>("SSN")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FamilyName");
+                    b.Property<string>("SSN");
 
                     b.Property<string>("FirstName");
 
+                    b.Property<string>("FamilyName");
+
                     b.Property<decimal>("Salary");
 
-                    b.HasKey("SSN");
+                    b.HasKey("SSN", "FirstName", "FamilyName");
 
                     b.ToTable("Employees");
                 });
@@ -46,13 +45,17 @@ namespace AdvancedApp.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("PrimaryFamilyName");
+
+                    b.Property<string>("PrimaryFirstName");
+
                     b.Property<string>("PrimarySSN");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PrimarySSN")
+                    b.HasIndex("PrimarySSN", "PrimaryFirstName", "PrimaryFamilyName")
                         .IsUnique()
-                        .HasFilter("[PrimarySSN] IS NOT NULL");
+                        .HasFilter("[PrimarySSN] IS NOT NULL AND [PrimaryFirstName] IS NOT NULL AND [PrimaryFamilyName] IS NOT NULL");
 
                     b.ToTable("SecondaryIdentity");
                 });
@@ -61,7 +64,7 @@ namespace AdvancedApp.Migrations
                 {
                     b.HasOne("AdvancedApp.Models.Employee", "PrimaryIdentity")
                         .WithOne("OtherIdentity")
-                        .HasForeignKey("AdvancedApp.Models.SecondaryIdentity", "PrimarySSN");
+                        .HasForeignKey("AdvancedApp.Models.SecondaryIdentity", "PrimarySSN", "PrimaryFirstName", "PrimaryFamilyName");
                 });
 #pragma warning restore 612, 618
         }
